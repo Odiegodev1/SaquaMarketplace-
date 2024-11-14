@@ -1,0 +1,66 @@
+// App.js
+import React, { useState } from 'react';
+import Hero from './components/Hero';
+import About from './components/About';
+import Marketplace from './components/Martk';
+function App() {
+  // Estado para armazenar a "página" atual
+  const [currentPage, setCurrentPage] = useState('Hero');
+
+  // Função para alterar a página
+  const handleNavigate = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Renderiza a página com base no estado 'currentPage'
+  return (
+    <div>
+      {currentPage === 'Hero' && <Hero onNavigate={handleNavigate} />}
+      {currentPage === 'about' && <About onNavigate={handleNavigate} />}
+      {currentPage === 'Marketplace' && <Marketplace onNavigate={handleNavigate} />}
+    </div>
+  );
+}
+
+export default App;
+
+
+
+
+import React, { useState, useEffect } from 'react';
+import Marketplace from './Marketplace';
+import ProductList from './ProductList';
+
+function App() {
+  const [currentPage, setCurrentPage] = useState('marketplace');
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const savedProducts = JSON.parse(localStorage.getItem('products'));
+    if (savedProducts) {
+      setProducts(savedProducts);
+    }
+  }, []);
+
+  const handleNavigate = (page) => {
+    setCurrentPage(page);
+  };
+
+  return (
+    <div>
+      <button onClick={() => handleNavigate('marketplace')} className="p-2 bg-blue-600 text-white rounded">
+        Ir para Cadastro de Produto
+      </button>
+      <button onClick={() => handleNavigate('productList')} className="p-2 bg-green-600 text-white rounded ml-2">
+        Ver Produtos
+      </button>
+
+      {currentPage === 'marketplace' && (
+        <Marketplace products={products} setProducts={setProducts} />
+      )}
+      {currentPage === 'productList' && <ProductList products={products} />}
+    </div>
+  );
+}
+
+export default App;
